@@ -39,7 +39,7 @@ if not os.path.isdir(config.PATH_MUSIC):
     urllib.request.urlretrieve(config.PATH_MUSIC_URL, "GTZAN.tar.gz")
     
     print("Uncompress")
-    os.system('tar -zxf GTZAN.tar.gz -C ../data')
+    os.system('tar -zxf GTZAN.tar.gz -C ../data/')
 
 
 def prepossessingAudio(file_Path, audio_Id):
