@@ -1,1 +1,1 @@
-worker: python Extract_Audio_Features.py
+worker: python src/Extract_Audio_Features.py
