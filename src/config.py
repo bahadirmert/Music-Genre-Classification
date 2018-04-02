@@ -57,16 +57,16 @@ class Connection:
 class CSV_configuration:
 
     CSV_DICT = {
-        'X_train' : './data/csv_files/X_train.csv',
-        'X_test' : './data/csv_files/X_test.csv',
-        'y_train' : './data/csv_files/y_train.csv',
-        'y_test' : './data/csv_files/y_test.csv',
-        'arr_tsne' : './data/arrays/arr_TSNE.npy'
+        'X_train' : '../data/csv_files/X_train.csv',
+        'X_test' : '../data/csv_files/X_test.csv',
+        'y_train' : '../data/csv_files/y_train.csv',
+        'y_test' : '../data/csv_files/y_test.csv',
+        'arr_tsne' : '../data/arrays/arr_TSNE.npy'
     }
     
     TRAIN_TEST_SPLIT_SIZE = 0.2
     
     
-PATH_MUSIC = './data/genres'
+PATH_MUSIC = '../data/genres'
 PATH_MUSIC_URL = 'http://opihi.cs.uvic.ca/sound/genres.tar.gz'
-SAVE_PLT = './data/assets'
+SAVE_PLT = '../data/assets'
