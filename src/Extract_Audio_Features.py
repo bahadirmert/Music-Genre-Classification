@@ -36,10 +36,10 @@ if not os.path.isdir(config.PATH_MUSIC):
     print("Music not found in: " + config.PATH_MUSIC + " - Please change config.py")
 
     print("Downloading with urllib: " + config.PATH_MUSIC_URL)
-    urllib.request.urlretrieve(config.PATH_MUSIC_URL, "GTZAN.tar.gz", reporthook)
+    urllib.request.urlretrieve(config.PATH_MUSIC_URL, "GTZAN.tar.gz")
     
-    print("descomprimiendo")
-    os.system('tar zxf GTZAN.tar.gz -C ../data')
+    print("Uncompress")
+    os.system('tar -zxf GTZAN.tar.gz -C ../data')
 
 
 def prepossessingAudio(file_Path, audio_Id):
