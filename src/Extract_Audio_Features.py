@@ -9,8 +9,9 @@ Created on Tue Feb  6 12:41:01 2018
 @description: 
 """
 
-import sys, os, librosa, urllib.request, time
+import sys, os, librosa, urllib.request
 import config
+import numpy as np
 
 
 directory = ['blues', 'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock']
@@ -18,20 +19,7 @@ progress = 1.0
 
 """
  Check If GTZAN database is downloaded, otherwise we will download and then unzip in the indicated folder.
-"""
-def reporthook(count, block_size, total_size):
-    global start_time
-    if count == 0:
-        start_time = time.time()
-        return
-    duration = time.time() - start_time
-    progress_size = int(count * block_size)
-    speed = int(progress_size / (1024 * duration))
-    percent = int(count * block_size * 100 / total_size)
-    sys.stdout.write("\r...%d%%, %d MB, %d KB/s, %d seconds passed" %
-                    (percent, progress_size / (1024 * 1024), speed, duration))
-    sys.stdout.flush()
-    
+"""    
 if not os.path.isdir(config.PATH_MUSIC):
     print("Music not found in: " + config.PATH_MUSIC + " - Please change config.py")
 
@@ -39,16 +27,27 @@ if not os.path.isdir(config.PATH_MUSIC):
     urllib.request.urlretrieve(config.PATH_MUSIC_URL, "GTZAN.tar.gz")
     
     print("Uncompress")
-    os.system('tar -zxf GTZAN.tar.gz -C ../data/')
+    if(os.path.isdir('../data')):
+        os.system('mkdir ../data')
+    os.system('tar -zxvf GTZAN.tar.gz -C ../data/')
 
 
 def prepossessingAudio(file_Path, audio_Id):
     data_to_insert = {}
-        
-    y, sr = librosa.load(file_Path, duration= 30.00 , mono=True) # Load audio file with Librosa
-    S = librosa.feature.melspectrogram(y, sr=sr, n_mels= 128, n_fft= 2048, hop_length=1024)
+    featuresArray = []
+    #y, sr = librosa.load(file_Path, duration= 30.00 , mono=True) # Load audio file with Librosa
+    #S = librosa.feature.melspectrogram(y, sr=sr, n_mels= 128, n_fft= 2048, hop_length=1024)
+    for i in range(0, 30000, 100):
+        if i + 100 <= 30000 - 1:
+            y, sr = librosa.load(file_Path, offset=i / 1000.0, duration=100 / 1000.0) # Load audio file with Librosa
+            S = librosa.feature.melspectrogram(y, sr=sr, n_mels=128)
+            featuresArray.append(S)
+            if len(featuresArray) == 599:
+                break
     
-    data_to_insert[audio_Id] = S.tolist() 
+    aux = np.vstack(featuresArray)
+    data_to_insert[audio_Id] = aux.tolist()  #S.tolist() 
+
     songs.insert_one(data_to_insert) # Insert in MongoDB
 
 
