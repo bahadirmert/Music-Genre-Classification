@@ -5,21 +5,31 @@
 Master in: Artificial Intelligence and Robotics University of  Rome  "La Sapienza"
 </p>
 
-
+ 
 ## Table of contents
-
+- [Abstract](#abstract)
 - [Quick start](#quick-start)
 - [What's included](#whats-included)
 - [GTZAN Dataset](#gtzan-dataset)
-- [Execution](#execution) (*****)
-- [Documentation](#documentation)(**(*****)***)
-- [Contributing](#contributing)
-- [Community](#community)(*****)
+- [Execution](#execution)
+- [Documentation](#documentation)(****)
+- [Code](#code)
+- [Results](#results)(*****)
 - [Versioning](#versioning)(*****)
 - [Creators](#creators)(*****)
 - [Copyright and license](#copyright-and-license)(*****)
 
+## Abstract
+
+
+En este proyecto entrenamos un sistema de clasificación de género musical personalizado con nuestros propios géneros y datos. El modelo toma como entrada el spectogram de marcos de música y analiza la imagen usando una Red Neural Convolucional (CNN) más una Red Neuronal Recurrente (RNN). La salida del sistema es un vector de géneros predichos para la canción.
+
+Ponemos a punto su modelo con un pequeño conjunto de datos (30 canciones por género) y lo probamos en el conjunto de datos GTZAN proporcionando una precisión final del 80%.
+
 ## Quick start
+
+It is necessary to have installed: Python 3.5.2
+
 The present code has been developed under python3. The simplest way to run the program is creating a virtual environment, for this it is necessary to have installed [pip](https://pypi.python.org/pypi/pip) and [virtualenv](https://github.com/pypa/virtualenv).
 
 ```bash
@@ -55,15 +65,32 @@ music-genre-classification/
 │   │   │   ├── ...
 │   │   ├── classical/
 │   │   ├── ...
-|   ├── config.py
-	⁃	└── scripts/
-    ├── Extract_Audio_Features.py
-    ├── Get_Train_Test_Data.py
-    ├── TSNE_figure.py
-    ├── KNeighbors_Classifier.py
-    └── neuraln.py
+│   ├── config.py
+├── src/
+│   ├── Extract_Audio_Features.py
+│   ├── Get_Train_Test_Data.py
+│   ├── TSNE_figure.py
+│   ├── KNeighbors_Classifier.py
+│   └── neuraln.py
+├── requirements.txt
+├── Procfile
+└── Others Files (.travis.yml, .gitignore)
+
 (*) Python execution will generate this files. (see examples)
 ```
 
 ## GTZAN Dataset
 http://marsyasweb.appspot.com/download/data_sets/
+
+## Execution
+
+I have designed a main program that executes the programs that the user wants.
+
+```python3
+$ python3 main.py
+```
+
+To make the classification it is necessary first, to extract the data of the songs. It can be done locally or on a server.
+
+
+## Code 

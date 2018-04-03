@@ -13,16 +13,17 @@ Created on Tue Feb  6 12:41:01 2018
 import numpy as np
 import matplotlib.pyplot as plt
 import sklearn, time
+import config
 import itertools
 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn import linear_model
 
-X_train = np.loadtxt('X_train.csv', delimiter=',')
-y_train = np.loadtxt('y_train.csv' ,delimiter=',')
-X_test = np.loadtxt('X_test.csv', delimiter=',')
-y_test = np.loadtxt('y_test.csv' ,delimiter=',')
+X_train = np.loadtxt(config.CSV_configuration.CSV_DICT['X_train'], delimiter=',')
+y_train = np.loadtxt(config.CSV_configuration.CSV_DICT['y_train'] ,delimiter=',')
+X_test = np.loadtxt(config.CSV_configuration.CSV_DICT['X_test'], delimiter=',')
+y_test = np.loadtxt(config.CSV_configuration.CSV_DICT['y_test'] ,delimiter=',')
 
 
 X_train =  sklearn.preprocessing.scale(X_train)
@@ -71,6 +72,19 @@ def plot_cnf(model,dataset_x,dataset_y,GENRES):
     plt.figure()
     confusion_matrix(cnf_matrix,classes=GENRES,title='Confusion matrix')
     plt.show()
+
+
+
+start_time = time.time()
+knn = KNeighborsClassifier(n_neighbors=1)
+knn.fit(X_train,y_train)
+print("Training Score: {:.3f}".format(knn.score(X_train,y_train)))
+print("Test score: {:.3f}".format(knn.score(X_test,y_test)))  
+
+plot_cnf(knn,X_test,y_test,GENRES)
+print("---- %s Seconds -----" % (time.time() - start_time))
+
+
 
 
 

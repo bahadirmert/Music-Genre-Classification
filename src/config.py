@@ -10,6 +10,7 @@ from pymongo import MongoClient
 
 class Connection:
     
+    ALLOWED_CONNECTION = False
     DATA_BASE_DICT = {
         'blues': 'ds219318.mlab.com:19318/blues_db',
         'classical': 'ds119258.mlab.com:19258/classical_db',
@@ -56,6 +57,7 @@ class Connection:
 
 class CSV_configuration:
 
+    PATH_CSV_FILES = '../data/csv_files'
     CSV_DICT = {
         'X_train' : '../data/csv_files/X_train.csv',
         'X_test' : '../data/csv_files/X_test.csv',
@@ -64,9 +66,11 @@ class CSV_configuration:
         'arr_tsne' : '../data/arrays/arr_TSNE.npy'
     }
     
+    DATA_SIZE = 40 # 20%
     TRAIN_TEST_SPLIT_SIZE = 0.2
     
     
 PATH_MUSIC = '../data/genres'
+PATH_MUSIC_NP_FILES = '../data/songs_np/'
 PATH_MUSIC_URL = 'http://opihi.cs.uvic.ca/sound/genres.tar.gz'
 SAVE_PLT = '../data/assets'

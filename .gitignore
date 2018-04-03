@@ -4,4 +4,6 @@
 venv/
 __pycache__
 /data/genres
+/data/songs_np
+/data/csv_files
 GTZAN.tar.gz
