@@ -34,19 +34,14 @@ if not os.path.isdir(config.PATH_MUSIC_HEROKU):
 
 def prepossessingAudio(file_Path, audio_Id):
     data_to_insert = {}
-    featuresArray = []
+
     #y, sr = librosa.load(file_Path, duration= 30.00 , mono=True) # Load audio file with Librosa
     #S = librosa.feature.melspectrogram(y, sr=sr, n_mels= 128, n_fft= 2048, hop_length=1024)
-    for i in range(0, 30000, 100):
-        if i + 100 <= 30000 - 1:
-            y, sr = librosa.load(file_Path, offset=i / 1000.0, duration=100 / 1000.0) # Load audio file with Librosa
-            S = librosa.feature.melspectrogram(y, sr=sr, n_mels=128)
-            featuresArray.append(S)
-            if len(featuresArray) == 599:
-                break
-    
-    aux = np.vstack(featuresArray)
-    data_to_insert[audio_Id] = aux.tolist()  #S.tolist() 
+
+    y, sr = librosa.load(file_Path) # Load audio file with Librosa
+    S = librosa.feature.melspectrogram(y, sr=sr, n_mels=128)
+
+    data_to_insert[audio_Id] = S.tolist() 
 
     songs.insert_one(data_to_insert) # Insert in MongoDB
 
