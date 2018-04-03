@@ -3,3 +3,5 @@
 *.egg-info
 venv/
 __pycache__
+/data/genres/*
+/src/GTZAN.tar.gz

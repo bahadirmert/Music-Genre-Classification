@@ -9,7 +9,7 @@ Created on Tue Feb  6 12:41:01 2018
 @description: 
 """
 
-import sys, os, librosa, urllib.request, time
+import sys, os, librosa, urllib.request
 import config
 
 
@@ -18,20 +18,7 @@ progress = 1.0
 
 """
  Check If GTZAN database is downloaded, otherwise we will download and then unzip in the indicated folder.
-"""
-def reporthook(count, block_size, total_size):
-    global start_time
-    if count == 0:
-        start_time = time.time()
-        return
-    duration = time.time() - start_time
-    progress_size = int(count * block_size)
-    speed = int(progress_size / (1024 * duration))
-    percent = int(count * block_size * 100 / total_size)
-    sys.stdout.write("\r...%d%%, %d MB, %d KB/s, %d seconds passed" %
-                    (percent, progress_size / (1024 * 1024), speed, duration))
-    sys.stdout.flush()
-    
+"""    
 if not os.path.isdir(config.PATH_MUSIC):
     print("Music not found in: " + config.PATH_MUSIC + " - Please change config.py")
 
@@ -39,7 +26,9 @@ if not os.path.isdir(config.PATH_MUSIC):
     urllib.request.urlretrieve(config.PATH_MUSIC_URL, "GTZAN.tar.gz")
     
     print("Uncompress")
-    os.system('tar -zxf GTZAN.tar.gz -C ../data/')
+    if(os.path.isdir('../data')):
+        os.system('mkdir ../data')
+    os.system('tar -zxvf GTZAN.tar.gz -C ../data')
 
 
 def prepossessingAudio(file_Path, audio_Id):
@@ -83,6 +72,10 @@ for root, subdirs, files in os.walk(config.PATH_MUSIC):
             sys.stdout.write("\n%f%%  " % porcentaje)
             sys.stdout.flush()
             progress += 1
+        
+        if progress == 10 or progress == 20 or progress == 30 or progress == 40 or progress == 50 or progress == 60 or \
+        progress == 70 or progress == 80 or progress == 90 or progress == 100:
+            break
             
     client.close() # Close connection with the database
     directory.pop(0) # Next directory
