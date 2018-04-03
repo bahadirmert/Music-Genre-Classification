@@ -68,5 +68,6 @@ class CSV_configuration:
     
     
 PATH_MUSIC = '../data/genres'
+PATH_MUSIC_HEROKU = '/app/data/genres'
 PATH_MUSIC_URL = 'http://opihi.cs.uvic.ca/sound/genres.tar.gz'
 SAVE_PLT = '../data/assets'

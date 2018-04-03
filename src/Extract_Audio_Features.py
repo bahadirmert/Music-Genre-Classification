@@ -11,6 +11,7 @@ Created on Tue Feb  6 12:41:01 2018
 
 import sys, os, librosa, urllib.request
 import config
+import numpy as np
 
 
 directory = ['blues', 'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock']
@@ -19,7 +20,7 @@ progress = 1.0
 """
  Check If GTZAN database is downloaded, otherwise we will download and then unzip in the indicated folder.
 """    
-if not os.path.isdir(config.PATH_MUSIC):
+if not os.path.isdir(config.PATH_MUSIC_HEROKU):
     print("Music not found in: " + config.PATH_MUSIC + " - Please change config.py")
 
     print("Downloading with urllib: " + config.PATH_MUSIC_URL)
@@ -33,11 +34,20 @@ if not os.path.isdir(config.PATH_MUSIC):
 
 def prepossessingAudio(file_Path, audio_Id):
     data_to_insert = {}
-        
-    y, sr = librosa.load(file_Path, duration= 30.00 , mono=True) # Load audio file with Librosa
-    S = librosa.feature.melspectrogram(y, sr=sr, n_mels= 128, n_fft= 2048, hop_length=1024)
+    featuresArray = []
+    #y, sr = librosa.load(file_Path, duration= 30.00 , mono=True) # Load audio file with Librosa
+    #S = librosa.feature.melspectrogram(y, sr=sr, n_mels= 128, n_fft= 2048, hop_length=1024)
+    for i in range(0, 30000, 100):
+        if i + 100 <= 30000 - 1:
+            y, sr = librosa.load(file_Path, offset=i / 1000.0, duration=100 / 1000.0) # Load audio file with Librosa
+            S = librosa.feature.melspectrogram(y, sr=sr, n_mels=128)
+            featuresArray.append(S)
+            if len(featuresArray) == 599:
+                break
     
-    data_to_insert[audio_Id] = S.tolist() 
+    aux = np.vstack(featuresArray)
+    data_to_insert[audio_Id] = aux.tolist()  #S.tolist() 
+
     songs.insert_one(data_to_insert) # Insert in MongoDB
 
 
@@ -45,7 +55,7 @@ def prepossessingAudio(file_Path, audio_Id):
  We go throught folders and establish a connection with MongoDB.
  We call prepossessingAudio() function to get the melspectrogram with Librosa module.
 """
-for root, subdirs, files in os.walk(config.PATH_MUSIC):
+for root, subdirs, files in os.walk(config.PATH_MUSIC_HEROKU):
 
     subdirs.sort() # Sort all subdirs
     
@@ -72,10 +82,6 @@ for root, subdirs, files in os.walk(config.PATH_MUSIC):
             sys.stdout.write("\n%f%%  " % porcentaje)
             sys.stdout.flush()
             progress += 1
-        
-        if progress == 10 or progress == 20 or progress == 30 or progress == 40 or progress == 50 or progress == 60 or \
-        progress == 70 or progress == 80 or progress == 90 or progress == 100:
-            break
             
     client.close() # Close connection with the database
     directory.pop(0) # Next directory
