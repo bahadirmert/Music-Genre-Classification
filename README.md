@@ -4,7 +4,7 @@
   Project carried out by José Jesús Torronteras Hernández, for the subject of Neural Networks, 
 Master in: Artificial Intelligence and Robotics University of  Rome  "La Sapienza"
 </p>
-  
+
 
 ## Table of contents
 
@@ -24,11 +24,13 @@ The present code has been developed under python3. The simplest way to run the p
 
 ```bash
 # We create the environment
-$ virtualenv music-genre-classification
+$ virtualenv --python python3 music-genre-classification-env
 # We activate the environment
-$ source music-genre-classification/bin/activate
+$ source music-genre-classification-env/bin/activate
 # Install all the necessary python packages
-$ pip install -r requirements.txt
+$ cd music-genre-classification-env
+$ git clone https://github.com/xexuew/Music-Genre-Classification.git .
+$ pip3 install -r requirements.txt
 ```
 Once we have our environment created and the packages installed, we can proceed to the [execution](#execution). (It is necessary to have downloaded and unzipped [GTZAN dataset)](#gtzan-dataset) in the folder `data / genres` [See structure Project](#whats-included))
 
