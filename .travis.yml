@@ -6,7 +6,7 @@ os:
   - osx
 install:
   - pip3 install -r requirements.txt
-  - travis_wait 30 python3 src/Extract_Audio_Features.py
+  - travis_wait 50 python3 src/Extract_Audio_Features.py
 # command to run tests
 script:
   - python3 src/Get_Train_Test_Data.py
