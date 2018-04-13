@@ -65,20 +65,20 @@ class Connection:
 
 class DATA_configuration:
 
-    PATH_DATA_FILES = '../data/data_files'
+    PATH_DATA_FILES = './data/data_files/'
     DATA = {
-        'X_train' : '../data/data_files/X_train.npy',
-        'X_test' : '../data/data_files/X_test.npy',
-        'y_train' : '../data/data_files/y_train.npy',
-        'y_test' : '../data/data_files/y_test.npy',
-        'arr_tsne' : '../data/arrays/arr_TSNE.npy'
+        'X_train' : './data/data_files/X_train.npy',
+        'X_test' : './data/data_files/X_test.npy',
+        'y_train' : './data/data_files/y_train.npy',
+        'y_test' : './data/data_files/y_test.npy',
+        'arr_tsne' : './data/arrays/arr_TSNE.npy'
     }
     MULTIDIMENSIONAL_ARR = False # Change to False if you dont want a 3D Array.
     DATA_SIZE = 100 # 20% of dataset
     TRAIN_TEST_SPLIT_SIZE = 0.2 # Size of the X_test
     
     
-PATH_MUSIC = '../data/genres'
-PATH_MUSIC_NP_FILES = '../data/songs_np/'
+PATH_MUSIC = './data/genres/'
+PATH_MUSIC_NP_FILES = './data/songs_np/'
 PATH_MUSIC_URL = 'http://opihi.cs.uvic.ca/sound/genres.tar.gz'
-SAVE_PLT = '../data/assets'
+SAVE_PLT = './data/assets'

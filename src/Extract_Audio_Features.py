@@ -33,9 +33,9 @@ def check_files():
         urllib.request.urlretrieve(config.PATH_MUSIC_URL, "GTZAN.tar.gz")
         
         print("Uncompress GTZAN.tar.gz")
-        if(os.path.isdir('../data')):
-            os.system('mkdir ../data')
-        os.system('tar -zxvf GTZAN.tar.gz -C ../data/')
+        if(os.path.isdir('./data/')):
+            os.system('mkdir ./data/')
+        os.system('tar -zxvf GTZAN.tar.gz -C ./data/')
         
     else:
         
@@ -100,8 +100,8 @@ for root, subdirs, files in os.walk(config.PATH_MUSIC):
         
     else:
         
-        os.system('mkdir ../data/songs_np/')
-        path_dir = "../data/songs_np/" + directory[0]
+        os.system('mkdir ./data/songs_np/')
+        path_dir = "./data/songs_np/" + directory[0]
         os.system('mkdir ' + str(path_dir)) # Create the folder to save the melspectrogram
         
         for filename in files:
@@ -116,7 +116,7 @@ for root, subdirs, files in os.walk(config.PATH_MUSIC):
                 try:
                     
                     S = prepossessingAudio(file_Path, audio_ID)
-                    path_song = "../data/songs_np/" + directory[0] + "/" + audio_ID
+                    path_song = "./data/songs_np/" + directory[0] + "/" + audio_ID
 
                     np.save(path_song, S)
                     
