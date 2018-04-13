@@ -8,6 +8,14 @@ Created on Tue Feb  6 12:41:01 2018
 """
 from pymongo import MongoClient
 
+class Audio_features:
+    SR = 22050 # default see https://librosa.github.io/librosa/generated/librosa.core.load.html
+    # Generate (128, 625)
+    N_MELS = 128
+    N_FFT = 2048
+    HOP_LENGTH = 1024
+    DURATION = 29.02
+
 class Connection:
     
     ALLOWED_CONNECTION = False
@@ -55,19 +63,19 @@ class Connection:
         return songs_doc
 
 
-class CSV_configuration:
+class DATA_configuration:
 
-    PATH_CSV_FILES = '../data/csv_files'
-    CSV_DICT = {
-        'X_train' : '../data/csv_files/X_train.csv',
-        'X_test' : '../data/csv_files/X_test.csv',
-        'y_train' : '../data/csv_files/y_train.csv',
-        'y_test' : '../data/csv_files/y_test.csv',
+    PATH_DATA_FILES = '../data/data_files'
+    DATA = {
+        'X_train' : '../data/data_files/X_train.npy',
+        'X_test' : '../data/data_files/X_test.npy',
+        'y_train' : '../data/data_files/y_train.npy',
+        'y_test' : '../data/data_files/y_test.npy',
         'arr_tsne' : '../data/arrays/arr_TSNE.npy'
     }
-    
-    DATA_SIZE = 40 # 20%
-    TRAIN_TEST_SPLIT_SIZE = 0.2
+    MULTIDIMENSIONAL_ARR = False # Change to False if you dont want a 3D Array.
+    DATA_SIZE = 100 # 20% of dataset
+    TRAIN_TEST_SPLIT_SIZE = 0.2 # Size of the X_test
     
     
 PATH_MUSIC = '../data/genres'
