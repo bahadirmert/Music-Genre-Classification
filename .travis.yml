@@ -3,10 +3,10 @@ python:
   - "3.6"
 os:
   - linux
-  - osx
 install:
   - pip3 install -r requirements.txt
   - travis_wait 50 python3 src/Extract_Audio_Features.py
+  - python3 src/Get_Train_Test_Data.py
 # command to run tests
 script:
-  - python3 src/Get_Train_Test_Data.py
+  - python3 src/KNeighbors_Classifier.py
