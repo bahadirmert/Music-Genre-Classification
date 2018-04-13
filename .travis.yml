@@ -9,4 +9,4 @@ install:
   - python3 src/Get_Train_Test_Data.py
 # command to run tests
 script:
-  - python3 src/KNeighbors_Classifier.py
+  - travis_wait 600 python3 src/KNeighbors_Classifier.py
