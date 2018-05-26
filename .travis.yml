@@ -6,7 +6,6 @@ os:
   - osx
 install:
   - pip3 install -r requirements.txt
-  - python3 src/Extract_Audio_Features.py
 # command to run tests
 script:
-  - python3 src/Get_Train_Test_Data.py
+  - python3 src/main.py
