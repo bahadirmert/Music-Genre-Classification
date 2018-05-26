@@ -3,11 +3,10 @@
 test.py
 Untitled.ipynb
 
-/data/genres
-/data/songs_np
-/data/data_files
 GTZAN.tar.gz
-weights.hdf5
+
+.floydexpt
+.floydignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

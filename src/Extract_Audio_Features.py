@@ -9,124 +9,92 @@
     @ Description: 
 """
 
-import sys
-import os
 import librosa
-import urllib.request 
-import config
 import numpy as np
+import csv
+import os
+import sys
 
+class ExtractAudioFeatures(object):
 
+    def __init__(self, config):
+        
+        self.PATH = config['PATH_CONFIGURATION']['AUDIO_PATH']
+        self.DEST = config['PATH_CONFIGURATION']['NUMPY_PATH']
 
-"""
-    @ Description: This Function check if GTZAN dataset is dowloaded and uncompressed. Otherwise we will download and then unzip in the indicated folder.
-    @ Return: Nothing
-"""
-def check_files():
+        self.SR = int(config['AUDIO_FEATURES']['SR'])
+        self.N_MELS = int(config['AUDIO_FEATURES']['N_MELS'])
+        self.N_FFT = int(config['AUDIO_FEATURES']['N_FFT'])
+        self.HOP_LENGTH = int(config['AUDIO_FEATURES']['HOP_LENGTH'])
+        self.DURATION = int(config['AUDIO_FEATURES']['DURATION'])
     
-    if not os.path.isdir(config.PATH_MUSIC):
+    #
+    # Description:
+    # Input:
+    # Output:
+    def librosaAudio(self, file_Path):
         
-        os.system('mkdir ' + config.PATH_MUSIC)
-        print("Music not found in: " + config.PATH_MUSIC + " - Please change config.py")
-    
-        print("Downloading with urllib: " + config.PATH_MUSIC_URL)
-        urllib.request.urlretrieve(config.PATH_MUSIC_URL, "GTZAN.tar.gz")
-        
-        print("Uncompress GTZAN.tar.gz")
-        if(os.path.isdir('../data')):
-            os.system('mkdir ../data')
-        os.system('tar -zxvf GTZAN.tar.gz -C ../data/')
-        
-    else:
-        
-        print("GTZAN dataset founded " + config.PATH_MUSIC)
+        # Load audio file with Librosa
+        y, sr = librosa.load(file_Path, duration = self.DURATION)
 
-
-"""
-    @ Description: This Function extract all the songs features. Its necessary Librosa.
-    @ Returns: (Array) Melspectrogram Song.
-"""
-def prepossessingAudio(file_Path, audio_Id):
-    
-    y, sr = librosa.load(file_Path, duration=config.Audio_features.DURATION) # Load audio file with Librosa
-    S = librosa.feature.melspectrogram(y, sr=sr, n_mels=config.Audio_features.N_MELS, n_fft= config.Audio_features.N_FFT, hop_length = config.Audio_features.HOP_LENGTH) #S = librosa.feature.melspectrogram(y, sr=sr, n_mels= 128, n_fft= 2048, hop_length=1024)   
-    
-    return S
-    
-
-"""
-    Main Program
-
-"""
-directory = ['blues', 'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock']
-progress = 1.0
-
-check_files()
-
-for root, subdirs, files in os.walk(config.PATH_MUSIC):
-    subdirs.sort() # Sort all subdirs
-    
-    if config.Connection.ALLOWED_CONNECTION:
+        S = librosa.power_to_db(
+                librosa.feature.melspectrogram(
+                    y,
+                    sr = sr,
+                    n_mels = self.N_MELS,
+                    n_fft = self.N_FFT,
+                    hop_length = self.HOP_LENGTH),
+                ref_power = np.max)
         
-        data_to_insert = {}
+        return S
+
+    #
+    # Description:
+    # Input:
+    # Output:
+    def prepossessingAudio(self):
         
-        client, songs = config.Connection.connection_DB(directory[0]) # Connection with MongoDB
-    
-        songs.delete_many({}) # Delete all elements in the Database
+        directory = ['blues', 'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock']
+        progress = 1.0
+
+        os.system('mkdir data/')
+        os.system('mkdir ' + self.DEST) # mkdir data/songs_np/ # data/songs_np/blues data/songs_np/classical
         
-        for filename in files:
-        
-            if filename.endswith('.au'): # Only we want audio files, delete files like .DS_store
+        with open(self.DEST + "url.csv", 'w') as csvfile:
+            writer = csv.writer(csvfile)
+
+            for root, subdirs, files in os.walk(self.PATH):
+                subdirs.sort() # Sort all subdirs
                 
-                file_Path = os.path.join(root, filename) # Get the Audio file path
-                print('File %s (full path: %s)' % (filename, file_Path))
+                os.system('mkdir ' + self.DEST + directory[0]) # Create the folder to save the melspectrogram
                 
-                audio_ID = os.path.splitext(filename)[0].replace(".", "_")  # Get ID audio necessary for MongoDB
-                
-                try:
-                    S = prepossessingAudio(file_Path, audio_ID)
-                    data_to_insert[audio_ID] = S.tolist() 
-                    songs.insert_one(data_to_insert) # Insert in MongoDB
-                except Exception as e:
-                    print("Error accured" + str(e))
-
-                porcentaje = progress / 10
-                sys.stdout.write("\n%f%%  " % porcentaje)
-                sys.stdout.flush()
-                progress += 1
-        
-        client.close() # Close connection with the database
-        directory.pop(0) # Next directory
-        
-    else:
-        
-        os.system('mkdir ../data/songs_np/')
-        path_dir = "../data/songs_np/" + directory[0]
-        os.system('mkdir ' + str(path_dir)) # Create the folder to save the melspectrogram
-        
-        for filename in files:
-            
-            if filename.endswith('.au'): # Only we want audio files, delete files like .DS_store
-                
-                file_Path = os.path.join(root, filename) # Get the Audio file path
-                print('File %s (full path: %s)' % (filename, file_Path))
-                
-                audio_ID = os.path.splitext(filename)[0].replace(".", "_")  # Get ID audio
-                
-                try:
+                for filename in files:
                     
-                    S = prepossessingAudio(file_Path, audio_ID)
-                    path_song = "../data/songs_np/" + directory[0] + "/" + audio_ID
+                    if filename.endswith('.au'): # Only we want audio files, delete files like .DS_store
+                        
+                        file_Path = os.path.join(root, filename) # Get the Audio file path
+                        print('File %s (full path: %s)' % (filename, file_Path))
+                        
+                        audio_ID = os.path.splitext(filename)[0].replace(".", "_")  # Get ID audio
+                        
+                        try:
 
-                    np.save(path_song, S)
-                    
-                except Exception as e:
-                    
-                    print("Error accured" + str(e))
+                            S = self.librosaAudio(file_Path) # Get the Melspectrogram
+                            path_song = self.DEST + directory[0] + "/" + audio_ID
 
-                porcentaje = progress / 10
-                sys.stdout.write("\n%f%%  " % porcentaje)
-                sys.stdout.flush()
-                progress += 1
-                
-        directory.pop(0) # Next directory
+                            np.save(path_song, S)
+
+                            writer.writerow([directory[0], path_song + ".npy"])
+                        except Exception as e:
+                            
+                            print("Error accured" + str(e))
+
+                        porcentaje = progress / 10
+                        sys.stdout.write("\n%f%%  " % porcentaje)
+                        sys.stdout.flush()
+                        progress += 1
+                            
+                directory.pop(0) # Next directory
+            del directory, porcentaje, progress, file_Path, path_song
+            del files, root, subdirs
+            del S
